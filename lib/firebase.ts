@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getFunctions } from "firebase/functions";
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyAMW4YRYDIDLExMUByPjkhi7pVLjgT5mU4",
   authDomain: "hellopoor-16c13.firebaseapp.com",
   projectId: "hellopoor-16c13",
@@ -14,7 +14,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
-const db = getFirestore(app);
 
-export { app, analytics, db }; 
+// Get Firestore instance
+export const db = getFirestore(app);
+
+// Get Functions instance
+export const functions = getFunctions(app);
+
+export { app }; 

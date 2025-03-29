@@ -1,18 +1,29 @@
 'use client';
 
-interface Ingredient {
+// ... existing code ...
+
+// Insert this above or near the existing interface/exports
+
+type Ingredient = {
   name: string;
   price: number;
   originalPrice: number;
-}
+};
 
 interface RecipeCardProps {
   title: string;
   ingredients: Ingredient[];
   savings: number;
+  recipeUrl?: string;
 }
 
-export function RecipeCard({ title, ingredients, savings }: RecipeCardProps) {
+export function RecipeCard({ title, ingredients, savings, recipeUrl }: RecipeCardProps) {
+  const handleViewRecipe = () => {
+    if (recipeUrl) {
+      window.open(recipeUrl, '_blank');
+    }
+  };
+
   return (
     <div className="recipe-card">
       <div className="savings-tag">Save {savings.toFixed(2)} kr</div>
@@ -31,7 +42,14 @@ export function RecipeCard({ title, ingredients, savings }: RecipeCardProps) {
         ))}
       </div>
 
-      <button className="view-recipe-button">View Recipe</button>
+      <button 
+        className="view-recipe-button"
+        onClick={handleViewRecipe}
+        disabled={!recipeUrl}
+      >
+        View Recipe
+      </button>
     </div>
   );
-} 
+}
+// ... existing code ...

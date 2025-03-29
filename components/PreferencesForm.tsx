@@ -19,9 +19,11 @@ export function PreferencesForm() {
   const router = useRouter();
   const [selectedPrefs, setSelectedPrefs] = useState<string[]>([]);
 
+// ... existing code ...
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const userId = localStorage.getItem('userId');
     if (!userId) {
       // Redirect to registration if no user ID
@@ -35,11 +37,16 @@ export function PreferencesForm() {
         preferences: selectedPrefs
       });
 
+      // Store preferences in localStorage, so we can retrieve them in /recipes
+      localStorage.setItem('userPreferences', JSON.stringify(selectedPrefs));
+
       router.push('/recipes');
     } catch (error) {
       console.error('Error updating preferences:', error);
     }
   };
+
+// ... existing code ...
 
   const togglePreference = (pref: string) => {
     if (selectedPrefs.includes(pref)) {
