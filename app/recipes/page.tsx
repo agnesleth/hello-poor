@@ -7,6 +7,8 @@ import { httpsCallable } from 'firebase/functions';
 import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { RecipeCard } from '@/components/RecipeCard';
 import { PageLayout } from '@/components/PageLayout';
+import { getFunctions } from 'firebase/functions';
+import { getApp } from 'firebase/app';
 
 // Define response type for Firebase function
 interface RecipeMatchResponse {
@@ -28,7 +30,6 @@ interface RecipeMatchResponse {
 
 export default function RecipesPage() {
   const router = useRouter();
-  const functions = useFunctions();
   const firestore = useFirestore();
 
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -37,7 +38,10 @@ export default function RecipesPage() {
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
+    console.log('🔍 USER ID from localStorage:', userId);
+    
     if (!userId) {
+      console.warn('⚠️ No userId found in localStorage, redirecting to home page');
       router.push('/');
       return;
     }
@@ -46,6 +50,7 @@ export default function RecipesPage() {
     const fetchExistingRecipes = async () => {
       try {
         setIsLoading(true);
+        console.log('📊 Checking for existing recipe matches for userId:', userId);
 
         const matchesRef = collection(firestore, 'recipe_matches');
         const q = query(
@@ -55,10 +60,18 @@ export default function RecipesPage() {
           limit(1)
         );
         const snapshot = await getDocs(q);
+        console.log('📊 Found existing matches:', !snapshot.empty);
 
         if (!snapshot.empty) {
           // If there's a stored recipe match, use it
           const docData = snapshot.docs[0].data();
+          console.log('📊 Retrieved recipe match document:', {
+            id: snapshot.docs[0].id,
+            timestamp: docData.timestamp,
+            hasRecommendations: !!docData.recommendations,
+            recommendationCount: docData.recommendations?.length || 0
+          });
+          
           if (docData.recommendations) {
             setRecipes(docData.recommendations);
           } else {
@@ -66,11 +79,12 @@ export default function RecipesPage() {
           }
           setIsLoading(false);
         } else {
+          console.log('📊 No existing matches found, generating new recipes');
           // Otherwise, generate new recipes
           await generateNewRecipes(userId);
         }
       } catch (err: any) {
-        console.error('Error fetching existing matches:', err);
+        console.error('❌ Error fetching existing matches:', err);
         setError(err.message);
         setIsLoading(false);
       }
@@ -82,28 +96,75 @@ export default function RecipesPage() {
   const generateNewRecipes = async (userId: string) => {
     try {
       setIsLoading(true);
-      const userPreferences = JSON.parse(localStorage.getItem('userPreferences') || '[]');
-
-      const generateRecipeMatches = httpsCallable<
-        { user_ref: string; food_preferences: { preferences: string[] } },
-        RecipeMatchResponse
-      >(functions, 'generateRecipeMatches');
       
-      const result = await generateRecipeMatches({
+      // Retrieve user preferences from localStorage
+      const userPreferencesRaw = localStorage.getItem('userPreferences');
+      console.log('🔍 RAW userPreferences from localStorage:', userPreferencesRaw);
+      
+      const userPreferences = JSON.parse(userPreferencesRaw || '[]');
+      console.log('🔍 PARSED userPreferences:', userPreferences);
+
+      // Get functions instance with region specified
+      const app = getApp();
+      console.log('🔧 Firebase app config:', app.options);
+      
+      const functions = getFunctions(app, 'us-central1');
+      console.log('🔧 Using Firebase Functions region:', 'us-central1');
+      
+      // Set custom headers to allow unauthenticated access (for development)
+      // @ts-ignore - TypeScript doesn't know about this property
+      functions.customHeaders = {
+        "Authorization": "Bearer owner" // This is a development-only approach
+      };
+      console.log('🔧 Set custom authorization header for unauthenticated access');
+      
+      const generateRecipeMatches = httpsCallable(
+        functions, 
+        'generateRecipeMatches'
+      );
+      
+      // Prepare the payload
+      const payload = {
         user_ref: userId,
         food_preferences: {
           preferences: userPreferences
         }
+      };
+      
+      console.log('📤 Calling Firebase function with payload:', JSON.stringify(payload, null, 2));
+      
+      // Call the function with a promise-based approach for better error handling
+      generateRecipeMatches(payload)
+      .then((result) => {
+        console.log('📥 Function call successful. Raw result:', result);
+        
+        const data = result.data as RecipeMatchResponse;
+        console.log('📥 Parsed response data:', JSON.stringify(data, null, 2));
+        
+        if (data?.recommendations) {
+          console.log('✅ Found recommendations, count:', data.recommendations.length);
+          setRecipes(data.recommendations);
+        } else {
+          console.warn('⚠️ No recommendations in response');
+          setRecipes([]);
+        }
+      })
+      .catch((err) => {
+        console.error('❌ Error calling function:', err);
+        console.error('❌ Error details:', {
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          stack: err.stack
+        });
+        setError(err.message || 'Failed to generate recipes');
+      })
+      .finally(() => {
+        console.log('🏁 Function call completed');
+        setIsLoading(false);
       });
-
-      if (result?.data?.recommendations) {
-        setRecipes(result.data.recommendations);
-      } else {
-        setRecipes([]);
-      }
-      setIsLoading(false);
     } catch (err: any) {
-      console.error('Error generating new recipes:', err);
+      console.error('❌ Unexpected error in generateNewRecipes:', err);
       setError(err.message);
       setIsLoading(false);
     }
@@ -111,8 +172,11 @@ export default function RecipesPage() {
 
   const handleGenerateRecipesAgain = () => {
     const userId = localStorage.getItem('userId');
+    console.log('🔄 Regenerating recipes for userId:', userId);
     if (userId) {
       generateNewRecipes(userId);
+    } else {
+      console.error('❌ Cannot regenerate recipes: No userId found');
     }
   };
 

@@ -9,8 +9,18 @@ import { firebaseConfig } from '@/lib/firebase';
 // This component initializes Firebase services after the FirebaseApp is created
 function FirebaseComponents({ children }: { children: ReactNode }) {
   const firebaseApp = useFirebaseApp();
+  console.log('🔥 Firebase app initialized with config:', {
+    projectId: firebaseApp.options.projectId,
+    appId: firebaseApp.options.appId,
+  });
+  
+  // Initialize Firestore
   const firestore = getFirestore(firebaseApp);
-  const functions = getFunctions(firebaseApp);
+  console.log('📚 Firestore initialized');
+  
+  // Initialize Functions with region
+  const functions = getFunctions(firebaseApp, 'us-central1');
+  console.log('⚙️ Firebase Functions initialized with region: us-central1');
 
   return (
     <FirestoreProvider sdk={firestore}>
@@ -30,6 +40,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isClient, setIsClient] = useState(false);
   
   useEffect(() => {
+    console.log('🏁 Client-side rendering activated');
     setIsClient(true);
   }, []);
 
@@ -37,6 +48,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     return null; // Return nothing on the server
   }
 
+  console.log('🔧 Firebase config being used:', {
+    projectId: firebaseConfig.projectId,
+    appId: firebaseConfig.appId,
+  });
+  
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <FirebaseComponents>
