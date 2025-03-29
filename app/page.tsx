@@ -1,103 +1,103 @@
-import Image from "next/image";
+'use client';
+
+import { useRef } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { PageLayout } from '@/components/PageLayout';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const howItWorksRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <PageLayout>
+      <main>
+        <div className="top-nav">
+          <a className="nav-link" onClick={() => scrollToSection(howItWorksRef)}>How It Works</a>
+          <a className="nav-link" onClick={() => scrollToSection(aboutRef)}>About</a>
+        </div>
+
+        <div className="container" style={{ paddingBottom: '0', minHeight: 'auto' }}>
+          <h1 className="hero-text">HELLO POOR</h1>
+          
+          <p className="subtitle">
+            Hungry and poor? We got you. Type in your city and get recipes based on real
+            grocery deals near you.
+          </p>
+
+          <Link href="/onboarding" className="button" style={{ marginBottom: '2rem' }}>
+            GET STARTED!
+          </Link>
+        </div>
+
+        <div id="how-it-works" ref={howItWorksRef} className="section" style={{ paddingTop: '1rem' }}>
+          <h2 className="section-title">How It Works</h2>
+          <p className="section-content">
+            Our app makes it easy to eat well on a budget by connecting you with recipes that use
+            ingredients on sale near you.
+          </p>
+
+          <div className="feature-grid">
+            <div className="feature-card">
+              <div className="feature-icon">
+                <Image
+                  src="/shopping-bag.svg"
+                  alt="Find Deals"
+                  width={32}
+                  height={32}
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Find Deals</h3>
+              <p>Discover discounted ingredients at local stores in your neighborhood.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon">
+                <Image
+                  src="/recipe.svg"
+                  alt="Get Recipes"
+                  width={32}
+                  height={32}
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Get Recipes</h3>
+              <p>See delicious recipes that use those discounted ingredients from local stores.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon">
+                <Image
+                  src="/piggy-bank.svg"
+                  alt="Save Money"
+                  width={32}
+                  height={32}
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Save Money</h3>
+              <p>Cook delicious meals while staying on budget and saving money every week.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="about" ref={aboutRef} className="section" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
+          <h2 className="section-title">About</h2>
+          <div className="section-content">
+            <p className="mb-4">
+              Hello Poor was created to help people eat well without breaking the bank. Our mission is to make 
+              nutritious, delicious meals accessible to everyone, regardless of budget constraints.
+            </p>
+            <p>
+              We partner with local grocery stores to get real-time deal information and generate recipes 
+              specifically tailored to use those discounted ingredients, helping you save money while enjoying 
+              great food.
+            </p>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }

@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hello Poor
+
+A web application that helps users find recipes based on local grocery deals. Type in your city and get recipes that use discounted ingredients from stores near you.
+
+## Features
+
+- User registration with name and location
+- Store selection based on user's city
+- Food preference customization
+- Recipe recommendations based on current grocery deals
+- Money-saving calculations for each recipe
+- Modern and responsive UI
+
+## Tech Stack
+
+- Next.js 14
+- Firebase (Authentication, Firestore, Cloud Functions)
+- Tailwind CSS
+- TypeScript
+- Shadcn UI Components
 
 ## Getting Started
 
-First, run the development server:
-
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/hello-poor.git
+cd hello-poor
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up Firebase:
+   - Create a new Firebase project
+   - Enable Firestore
+   - Copy your Firebase config to `lib/firebase.ts`
+   - Deploy the cloud functions (found in the `functions` directory)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Create necessary Firestore collections:
+   - `cities`: Contains city names and their associated stores
+   - `allowed_food_prefs`: Contains available food preferences
+   - `users`: Will store user data and preferences
 
-## Learn More
+5. Run the development server:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+HELLO-POOR/
+├── app/                   # Next.js app directory
+├── components/           # React components
+├── lib/                  # Utility functions and configurations
+├── public/              # Static assets
+└── types/               # TypeScript type definitions
+```
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
