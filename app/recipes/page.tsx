@@ -194,10 +194,17 @@ export default function RecipesPage() {
 
   // Convert each discounted ingredient into the shape expected by <RecipeCard />
   const formatIngredients = (recipe: any) => {
+    console.log('Formatting ingredients for recipe:', recipe.recipe_name);
+    
     if (!Array.isArray(recipe.savings_info)) {
+      console.warn('No savings_info array found for recipe:', recipe.recipe_name);
       return [];
     }
-    return recipe.savings_info.map((item: any) => {
+    
+    console.log('savings_info length:', recipe.savings_info.length);
+    console.log('Raw savings_info:', recipe.savings_info);
+    
+    const formattedIngredients = recipe.savings_info.map((item: any) => {
       const currentPrice = parseFloat(item.price) || 0;
       const discountAmount = parseFloat(item.discount_amount) || 0;
       return {
@@ -206,31 +213,86 @@ export default function RecipesPage() {
         originalPrice: currentPrice + discountAmount
       };
     });
+    
+    console.log('Formatted ingredients:', formattedIngredients);
+    return formattedIngredients;
   };
 
   return (
     <PageLayout>
-      <div className="container">
-        <h1 className="page-title">Your Recipe Matches</h1>
+      <div className="container" style={{
+        padding: '20px',
+        maxWidth: '800px',
+        margin: '0 auto',
+        backgroundColor: '#f8d48a', 
+        minHeight: '100vh'
+      }}>
+        <h1 className="page-title" style={{
+          textAlign: 'center',
+          marginBottom: '24px',
+          fontSize: '28px',
+          fontWeight: 'bold'
+        }}>Your Recipe Matches</h1>
         {isLoading ? (
-          <div className="loading">Loading your recipes...</div>
+          <div className="loading" style={{ textAlign: 'center', padding: '40px' }}>
+            Loading your recipes...
+          </div>
         ) : error ? (
-          <div className="error">
-            <p>Oops, something went wrong: {error}</p>
-            <button className="button" onClick={handleGenerateRecipesAgain}>
+          <div className="error" style={{ 
+            textAlign: 'center', 
+            padding: '40px',
+            backgroundColor: '#ffebee',
+            borderRadius: '8px' 
+          }}>
+            <p style={{ marginBottom: '16px' }}>Oops, something went wrong: {error}</p>
+            <button 
+              className="button" 
+              onClick={handleGenerateRecipesAgain}
+              style={{
+                backgroundColor: '#333',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '10px 20px',
+                cursor: 'pointer',
+                fontSize: '16px'
+              }}
+            >
               Try Again
             </button>
           </div>
         ) : recipes.length === 0 ? (
-          <div className="no-recipes">
-            <p>No recipes found. Click below to try generating new ones!</p>
-            <button className="button" onClick={handleGenerateRecipesAgain}>
+          <div className="no-recipes" style={{ 
+            textAlign: 'center', 
+            padding: '40px',
+            backgroundColor: '#f5f5f5',
+            borderRadius: '8px' 
+          }}>
+            <p style={{ marginBottom: '16px' }}>No recipes found. Click below to try generating new ones!</p>
+            <button 
+              className="button" 
+              onClick={handleGenerateRecipesAgain}
+              style={{
+                backgroundColor: '#333',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '10px 20px',
+                cursor: 'pointer',
+                fontSize: '16px'
+              }}
+            >
               Generate Recipes
             </button>
           </div>
         ) : (
           <>
-            <div className="recipes-grid">
+            <div className="recipes-grid" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              marginBottom: '32px'
+            }}>
               {recipes.map((recipe: any, index: number) => (
                 <RecipeCard
                   key={index}
@@ -238,12 +300,29 @@ export default function RecipesPage() {
                   ingredients={formatIngredients(recipe)}
                   savings={calculateSavings(recipe)}
                   recipeUrl={recipe.recipe_url}
+                  imageUrl={recipe.recipe_img}
                 />
               ))}
             </div>
-            <button className="button refresh-button" onClick={handleGenerateRecipesAgain}>
-              Generate New Recipes
-            </button>
+            <div style={{ textAlign: 'center', marginTop: '24px', marginBottom: '40px' }}>
+              <button 
+                className="button refresh-button" 
+                onClick={handleGenerateRecipesAgain}
+                style={{
+                  backgroundColor: '#333',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '50px',
+                  padding: '12px 28px',
+                  cursor: 'pointer',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+                }}
+              >
+                Generate New Recipes
+              </button>
+            </div>
           </>
         )}
       </div>
