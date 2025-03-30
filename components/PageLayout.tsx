@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
+import { Navbar } from './Navbar';
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -22,6 +23,7 @@ export function PageLayout({ children }: PageLayoutProps) {
           />
         </Link>
       </div>
+      <Navbar />
       {children}
     </>
   );

@@ -388,11 +388,11 @@ export default function RecipesPage() {
                   <div key={storeId} className="bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="bg-amber-600 text-white py-1 px-3">
                       <h2 className="text-base md:text-lg font-bold text-center">
-                        {storeData.store_name && storeData.store_name.length > 8
-                          ? storeData.store_name.slice(0, -8).toUpperCase()
-                          : storeData.store_name.toUpperCase()}
+                        {storeData.store_name && storeData.store_name.toUpperCase()}
                       </h2>
                     </div>
+
+                    <h3 className="text-sm font-semibold text-gray-800 my-2 text-center">Recommended Recipes</h3>
 
                     <div className="p-2 md:p-3 grid md:grid-cols-[200px_1fr] gap-2">
                       {/* Left side: Sale items */}
@@ -400,8 +400,6 @@ export default function RecipesPage() {
 
                       {/* Right side: Recipe recommendations */}
                       <div className="relative">
-                        <h3 className="text-sm font-semibold text-gray-800 mb-1 pl-1">Recommended Recipes</h3>
-
                         {/* Horizontal scrolling recipe container */}
                         <div className="relative">
                           {/* Left scroll button */}
@@ -440,6 +438,8 @@ export default function RecipesPage() {
                                   savings={calculateSavings(recipe)}
                                   recipeUrl={recipe.recipe_url}
                                   imageUrl={recipe.recipe_img}
+                                  storeId={storeId}
+                                  storeName={storeData.store_name}
                                 />
                               </div>
                             ))}

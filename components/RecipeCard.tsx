@@ -3,6 +3,9 @@
 // ... existing code ...
 
 // Insert this above or near the existing interface/exports
+import { useState } from 'react';
+import { useFavorites, Recipe as FavoriteRecipe } from '@/lib/FavoritesContext';
+import { Heart } from 'lucide-react';
 
 type Ingredient = {
   name: string;
@@ -16,12 +19,39 @@ interface RecipeCardProps {
   savings: number;
   recipeUrl?: string;
   imageUrl?: string;
+  storeId?: string;
+  storeName?: string;
 }
 
-export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }: RecipeCardProps) {
+export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, storeId = '', storeName = '' }: RecipeCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const recipeId = `${title}-${storeId}`;
+  const isFav = isFavorite(recipeId);
+
   const handleViewRecipe = () => {
     if (recipeUrl) {
       window.open(recipeUrl, '_blank');
+    }
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (isFav) {
+      removeFavorite(recipeId);
+    } else {
+      const recipe: FavoriteRecipe = {
+        id: recipeId,
+        title,
+        ingredients,
+        savings,
+        recipeUrl,
+        imageUrl,
+        storeId,
+        storeName
+      };
+      addFavorite(recipe);
     }
   };
   
@@ -29,18 +59,52 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }:
   console.log('Ingredients received:', ingredients);
 
   return (
-    <div className="recipe-card" style={{
-      backgroundColor: 'white',
-      borderRadius: '6px',
-      margin: '0',
-      boxShadow: '0 1px 4px rgba(0, 0, 0, 0.06)',
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
-      height: '360px',
-      overflow: 'hidden',
-      position: 'relative'
-    }}>
+    <div 
+      className="recipe-card" 
+      style={{
+        backgroundColor: 'white',
+        borderRadius: '6px',
+        margin: '0',
+        boxShadow: '0 1px 4px rgba(0, 0, 0, 0.06)',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '360px',
+        overflow: 'hidden',
+        position: 'relative'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Heart icon for favorites */}
+      <button 
+        className={`favorite-button ${isHovered || isFav ? 'visible' : 'invisible'}`}
+        onClick={handleToggleFavorite}
+        style={{
+          position: 'absolute',
+          top: '8px',
+          right: '8px',
+          zIndex: 10,
+          backgroundColor: 'white',
+          borderRadius: '50%',
+          width: '24px',
+          height: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: 'none',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          cursor: 'pointer',
+          opacity: isHovered || isFav ? 1 : 0,
+          transition: 'opacity 0.2s ease',
+        }}
+      >
+        <Heart 
+          fill={isFav ? "#ff4747" : "transparent"} 
+          color={isFav ? "#ff4747" : "#666"} 
+          size={14} 
+        />
+      </button>
       <div className="savings-tag" style={{
         backgroundColor: '#f5f5f5',
         color: '#333',

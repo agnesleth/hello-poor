@@ -4,9 +4,11 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PageLayout } from '@/components/PageLayout';
+import { MessageCircle, Star, Users } from 'lucide-react';
 
 export default function Home() {
   const howItWorksRef = useRef<HTMLDivElement>(null);
+  const testimonialsRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
@@ -16,11 +18,6 @@ export default function Home() {
   return (
     <PageLayout>
       <main className="min-h-screen bg-gradient-to-b from-amber-100 to-amber-50">
-        <div className="top-nav">
-          <a className="nav-link" onClick={() => scrollToSection(howItWorksRef)}>How It Works</a>
-          <a className="nav-link" onClick={() => scrollToSection(aboutRef)}>About</a>
-        </div>
-
         <div className="container" style={{ paddingBottom: '0', minHeight: 'auto' }}>
           <h1 className="hero-text text-amber-900">HELLO POOR</h1>
           
@@ -32,6 +29,66 @@ export default function Home() {
           <Link href="/onboarding" className="button">
             GET STARTED!
           </Link>
+        </div>
+
+        <div id="testimonials" ref={testimonialsRef} className="section" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
+          <h2 className="section-title text-amber-900">What Our Users Say</h2>
+          <p className="section-content text-amber-800">
+            Don't just take our word for it - hear from people who are already saving money and eating well.
+          </p>
+
+          <div className="feature-grid">
+            <div className="feature-card">
+              <div className="feature-icon bg-amber-100">
+                <MessageCircle className="h-8 w-8 text-amber-800" />
+              </div>
+              <div className="flex items-center justify-center mb-2">
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-amber-900">Agnes</h3>
+              <p className="text-amber-700">
+                "Wow! Now my boyfriend will not be useless in the kitchen!"
+              </p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon bg-amber-100">
+                <MessageCircle className="h-8 w-8 text-amber-800" />
+              </div>
+              <div className="flex items-center justify-center mb-2">
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-amber-900">Axel</h3>
+              <p className="text-amber-700">
+                "Finally! No more girl dinners!"
+              </p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon bg-amber-100">
+                <Users className="h-8 w-8 text-amber-800" />
+              </div>
+              <div className="flex items-center justify-center mb-2">
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-amber-900">Agnes & Axel</h3>
+              <p className="text-amber-700">
+                "Using Hello Poor we save well over 1000kr each month of groceries, and at least 2 hours of arguments! Lifesaver!"
+              </p>
+            </div>
+          </div>
         </div>
 
         <div id="how-it-works" ref={howItWorksRef} className="section" style={{ paddingTop: '1rem' }}>

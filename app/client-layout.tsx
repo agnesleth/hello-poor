@@ -5,6 +5,7 @@ import { FirebaseAppProvider, FirestoreProvider, FunctionsProvider, useFirebaseA
 import { getFirestore } from 'firebase/firestore';
 import { getFunctions } from 'firebase/functions';
 import { firebaseConfig } from '@/lib/firebase';
+import { FavoritesProvider } from '@/lib/FavoritesContext';
 
 // This component initializes Firebase services after the FirebaseApp is created
 function FirebaseComponents({ children }: { children: ReactNode }) {
@@ -25,7 +26,9 @@ function FirebaseComponents({ children }: { children: ReactNode }) {
   return (
     <FirestoreProvider sdk={firestore}>
       <FunctionsProvider sdk={functions}>
-        {children}
+        <FavoritesProvider>
+          {children}
+        </FavoritesProvider>
       </FunctionsProvider>
     </FirestoreProvider>
   );
