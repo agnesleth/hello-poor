@@ -63,7 +63,7 @@ export default function RecipesPage() {
     const container = scrollContainersRef.current[storeId]
     if (container) {
       container.scrollBy({
-        left: -300,
+        left: -210,
         behavior: "smooth",
       })
     }
@@ -74,7 +74,7 @@ export default function RecipesPage() {
     const container = scrollContainersRef.current[storeId]
     if (container) {
       container.scrollBy({
-        left: 300,
+        left: 210,
         behavior: "smooth",
       })
     }
@@ -253,29 +253,37 @@ export default function RecipesPage() {
     const items = storeSaleItems[storeId]
     if (!items || items.length === 0) {
       return (
-        <div className="flex items-center justify-center p-6 bg-gray-100 rounded-lg text-gray-500">
+        <div className="flex items-center justify-center p-2 bg-gray-100 rounded text-gray-500 text-xs">
           No sale items found
         </div>
       )
     }
 
+    // Sort items by price (from most expensive to cheapest)
+    const sortedItems = [...items].sort((a, b) => {
+      // Extract numeric values from price strings (removing "kr" and any spaces)
+      const priceA = parseFloat(a.price.replace(/[^\d.,]/g, '').replace(',', '.')) || 0
+      const priceB = parseFloat(b.price.replace(/[^\d.,]/g, '').replace(',', '.')) || 0
+      return priceB - priceA // Descending order (highest to lowest)
+    })
+
     return (
-      <div className="bg-white rounded-lg shadow-md p-4 max-h-[500px] overflow-y-auto">
-        <h3 className="text-lg font-semibold text-center mb-4 border-b pb-2">Items on Sale</h3>
-        <div className="space-y-3">
-          {items.slice(0, 15).map((item, idx) => (
-            <div key={idx} className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-0">
-              <div className="text-sm font-medium text-gray-800 pr-2">{item.name}</div>
+      <div className="bg-white rounded shadow-sm p-2 max-h-[350px] overflow-y-auto">
+        <h3 className="text-sm font-semibold text-center mb-1 border-b pb-1">Other Items on Sale</h3>
+        <div className="space-y-1">
+          {sortedItems.slice(0, 15).map((item, idx) => (
+            <div key={idx} className="flex justify-between items-center pb-1 border-b border-gray-100 last:border-0">
+              <div className="text-[10px] font-medium text-gray-800 pr-1 truncate max-w-[150px]">{item.name}</div>
               <div className="flex flex-col items-end">
-                <div className="font-bold text-sm">{item.price}</div>
+                <div className="font-bold text-[10px] whitespace-nowrap">{item.price}</div>
                 {item.discount_percentage !== "N/A" && (
-                  <div className="text-red-600 text-xs font-bold">Save {item.discount_percentage}</div>
+                  <div className="text-red-600 text-[10px] font-bold whitespace-nowrap">Save {item.discount_percentage}</div>
                 )}
               </div>
             </div>
           ))}
           {items.length > 15 && (
-            <div className="text-center text-sm text-gray-500 pt-2">+ {items.length - 15} more items</div>
+            <div className="text-center text-[10px] text-gray-500">+ {items.length - 15} more</div>
           )}
         </div>
       </div>
@@ -333,83 +341,83 @@ export default function RecipesPage() {
   return (
     <PageLayout>
       <div className="min-h-screen bg-gradient-to-b from-amber-100 to-amber-50">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <header className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-center text-amber-900">Your Recipe Matches</h1>
-            <p className="text-center text-amber-800 mt-2 max-w-2xl mx-auto">
+        <div className="container mx-auto px-2 py-3 max-w-7xl">
+          <header className="mb-3">
+            <h1 className="text-xl md:text-2xl font-bold text-center text-amber-900">Your Recipe Matches</h1>
+            <p className="text-center text-amber-800 mt-1 max-w-2xl mx-auto text-xs">
               Discover delicious recipes based on items currently on sale at your favorite stores
             </p>
           </header>
 
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-16">
-              <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-              <p className="text-amber-800 font-medium">Finding your perfect recipe matches...</p>
+            <div className="flex flex-col items-center justify-center py-10">
+              <div className="w-12 h-12 border-3 border-amber-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+              <p className="text-amber-800 font-medium text-sm">Finding your perfect recipe matches...</p>
             </div>
           ) : error ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-2xl mx-auto text-center">
-              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-red-800 mb-2">Something went wrong</h3>
-              <p className="text-red-700 mb-4">{error}</p>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 max-w-xl mx-auto text-center">
+              <AlertCircle className="h-8 w-8 text-red-500 mx-auto mb-2" />
+              <h3 className="text-base font-semibold text-red-800 mb-1">Something went wrong</h3>
+              <p className="text-red-700 mb-3 text-sm">{error}</p>
               <button
                 onClick={handleGenerateRecipesAgain}
-                className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-full transition-colors duration-200 inline-flex items-center"
+                className="bg-red-600 hover:bg-red-700 text-white font-medium py-1 px-4 rounded-full transition-colors duration-200 inline-flex items-center text-xs"
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
+                <RefreshCw className="w-3 h-3 mr-1" />
                 Try Again
               </button>
             </div>
           ) : Object.keys(storeRecommendations).length === 0 ? (
-            <div className="bg-white shadow-md rounded-lg p-8 max-w-2xl mx-auto text-center">
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">No Recipes Found</h3>
-              <p className="text-gray-600 mb-6">
+            <div className="bg-white shadow-md rounded-lg p-6 max-w-xl mx-auto text-center">
+              <h3 className="text-base font-semibold text-gray-800 mb-2">No Recipes Found</h3>
+              <p className="text-gray-600 mb-4 text-sm">
                 We couldn't find any recipe matches. Let's try generating some new ones!
               </p>
               <button
                 onClick={handleGenerateRecipesAgain}
-                className="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-8 rounded-full transition-colors duration-200 inline-flex items-center"
+                className="bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-6 rounded-full transition-colors duration-200 inline-flex items-center text-sm"
               >
-                <RefreshCw className="w-5 h-5 mr-2" />
+                <RefreshCw className="w-4 h-4 mr-1" />
                 Generate Recipes
               </button>
             </div>
           ) : (
             <>
-              <div className="space-y-12">
+              <div className="space-y-4">
                 {Object.entries(storeRecommendations).map(([storeId, storeData]) => (
-                  <div key={storeId} className="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div className="bg-amber-600 text-white py-3 px-6">
-                      <h2 className="text-xl md:text-2xl font-bold text-center">
+                  <div key={storeId} className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="bg-amber-600 text-white py-1 px-3">
+                      <h2 className="text-base md:text-lg font-bold text-center">
                         {storeData.store_name && storeData.store_name.length > 8
                           ? storeData.store_name.slice(0, -8).toUpperCase()
                           : storeData.store_name.toUpperCase()}
                       </h2>
                     </div>
 
-                    <div className="p-4 md:p-6 grid md:grid-cols-[280px_1fr] gap-6">
+                    <div className="p-2 md:p-3 grid md:grid-cols-[200px_1fr] gap-2">
                       {/* Left side: Sale items */}
-                      <div className="md:border-r md:pr-4">{renderSaleItems(storeId)}</div>
+                      <div className="md:border-r md:pr-1">{renderSaleItems(storeId)}</div>
 
                       {/* Right side: Recipe recommendations */}
                       <div className="relative">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4 pl-2">Recommended Recipes</h3>
+                        <h3 className="text-sm font-semibold text-gray-800 mb-1 pl-1">Recommended Recipes</h3>
 
                         {/* Horizontal scrolling recipe container */}
                         <div className="relative">
                           {/* Left scroll button */}
                           <button
                             onClick={() => scrollLeft(storeId)}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-10 h-10 rounded-full shadow-md flex items-center justify-center transition-all duration-200 border border-amber-200"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-5 h-5 rounded-full shadow-sm flex items-center justify-center transition-all duration-200 border border-amber-200"
                             aria-label="Scroll left"
                           >
-                            <ChevronLeft className="w-6 h-6" />
+                            <ChevronLeft className="w-3 h-3" />
                           </button>
 
                           <div
                             ref={(el) => {
                               scrollContainersRef.current[storeId] = el
                             }}
-                            className="flex overflow-x-auto gap-6 pb-4 px-12 scrollbar-hide scroll-smooth"
+                            className="flex overflow-x-auto gap-2 pb-2 px-6 scrollbar-hide scroll-smooth"
                           >
                             <style jsx>{`
                               .scrollbar-hide::-webkit-scrollbar {
@@ -421,8 +429,11 @@ export default function RecipesPage() {
                               }
                             `}</style>
 
-                            {storeData.recommendations.map((recipe, index) => (
-                              <div key={`${storeId}-${index}`} className="min-w-[280px] max-w-[320px] flex-none">
+                            {storeData.recommendations
+                              .slice()
+                              .sort((a, b) => calculateSavings(b) - calculateSavings(a))
+                              .map((recipe, index) => (
+                              <div key={`${storeId}-${index}`} className="min-w-[200px] w-[200px] flex-none">
                                 <RecipeCard
                                   title={recipe.recipe_name}
                                   ingredients={formatIngredients(recipe)}
@@ -437,10 +448,10 @@ export default function RecipesPage() {
                           {/* Right scroll button */}
                           <button
                             onClick={() => scrollRight(storeId)}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-10 h-10 rounded-full shadow-md flex items-center justify-center transition-all duration-200 border border-amber-200"
+                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-5 h-5 rounded-full shadow-sm flex items-center justify-center transition-all duration-200 border border-amber-200"
                             aria-label="Scroll right"
                           >
-                            <ChevronRight className="w-6 h-6" />
+                            <ChevronRight className="w-3 h-3" />
                           </button>
                         </div>
                       </div>
@@ -449,12 +460,12 @@ export default function RecipesPage() {
                 ))}
               </div>
 
-              <div className="mt-12 mb-8 text-center">
+              <div className="mt-4 mb-2 text-center">
                 <button
                   onClick={handleGenerateRecipesAgain}
-                  className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-200 transform hover:scale-105 inline-flex items-center"
+                  className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1 px-4 rounded-full shadow-sm transition-all duration-200 transform hover:scale-105 inline-flex items-center text-xs"
                 >
-                  <RefreshCw className="w-5 h-5 mr-2" />
+                  <RefreshCw className="w-3 h-3 mr-1" />
                   Generate New Recipes
                 </button>
               </div>

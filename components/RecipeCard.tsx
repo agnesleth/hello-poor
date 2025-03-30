@@ -31,21 +31,22 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }:
   return (
     <div className="recipe-card" style={{
       backgroundColor: 'white',
-      borderRadius: '16px',
+      borderRadius: '6px',
       margin: '0',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      boxShadow: '0 1px 4px rgba(0, 0, 0, 0.06)',
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
+      height: '360px',
       overflow: 'hidden',
       position: 'relative'
     }}>
       <div className="savings-tag" style={{
         backgroundColor: '#f5f5f5',
         color: '#333',
-        padding: '8px 16px',
+        padding: '3px 6px',
         fontWeight: 'bold',
-        fontSize: '16px',
+        fontSize: '11px',
         textAlign: 'center',
         width: '100%',
         borderBottom: '1px solid #eee'
@@ -56,8 +57,9 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }:
       {imageUrl && (
         <div style={{ 
           width: '100%', 
-          height: '250px',
-          overflow: 'hidden'
+          height: '120px',
+          overflow: 'hidden',
+          flexShrink: 0
         }}>
           <img 
             src={imageUrl} 
@@ -72,33 +74,60 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }:
       )}
       
       <div style={{
-        padding: '16px 20px',
+        padding: '8px 10px',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        flex: 1,
+        overflow: 'hidden'
       }}>
         <h3 className="recipe-title" style={{
-          margin: '0 0 20px 0',
-          fontSize: '20px',
+          margin: '0 0 5px 0',
+          fontSize: '12px',
           fontWeight: 'bold',
-          textAlign: 'center'
+          textAlign: 'center',
+          height: '50px',
+          overflow: 'hidden',
+          display: '-webkit-box',
+          WebkitLineClamp: 4,
+          WebkitBoxOrient: 'vertical',
+          textOverflow: 'ellipsis',
+          lineHeight: '1.1'
         }}>
           {title}
         </h3>
 
         {/* Debug info about ingredients */}
-        <div style={{ fontSize: '12px', color: '#999', marginBottom: '10px', textAlign: 'center' }}>
+        <div style={{ 
+          fontSize: '9px', 
+          color: '#999', 
+          marginBottom: '3px',
+          textAlign: 'center',
+          height: '12px',
+          overflow: 'hidden',
+          padding: '0 3px'
+        }}>
           {ingredients && ingredients.length ? `${ingredients.length} ingredients on sale` : 'No ingredients on sale'}
         </div>
 
         {ingredients && ingredients.length > 0 ? (
           <div className="recipe-ingredients" style={{
             width: '100%',
-            marginBottom: '20px'
+            marginBottom: '8px',
+            flex: 1,
+            overflow: 'hidden'
           }}>
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '10px'
+              gap: '3px',
+              height: '85px',
+              overflowY: 'auto',
+              border: '1px solid #f0f0f0',
+              borderRadius: '4px',
+              padding: '5px',
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#d1d1d1 #f5f5f5',
+              WebkitOverflowScrolling: 'touch'
             }}>
               {ingredients.map((ingredient, index) => (
                 <div 
@@ -108,31 +137,35 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }:
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: '6px 0',
+                    padding: '2px 0',
                     borderBottom: index < ingredients.length - 1 ? '1px solid #eee' : 'none'
                   }}
                 >
                   <span className="ingredient-name" style={{ 
                     fontWeight: '500',
-                    fontSize: '15px'
+                    fontSize: '11px',
+                    maxWidth: '50%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
                   }}>
                     {ingredient.name}
                   </span>
                   <div style={{ 
                     display: 'flex', 
                     justifyContent: 'flex-end', 
-                    gap: '8px'
+                    gap: '3px'
                   }}>
                     <span style={{ 
                       fontWeight: 'bold',
-                      fontSize: '15px'
+                      fontSize: '11px'
                     }}>
                       {ingredient.price.toFixed(2)} kr
                     </span>
                     <span style={{ 
                       textDecoration: 'line-through',
                       color: '#999',
-                      fontSize: '15px'
+                      fontSize: '11px'
                     }}>
                       {ingredient.originalPrice.toFixed(2)} kr
                     </span>
@@ -143,17 +176,23 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }:
           </div>
         ) : (
           <div style={{ 
-            padding: '10px', 
+            padding: '5px', 
             backgroundColor: '#f8f8f8', 
-            borderRadius: '8px', 
-            marginBottom: '20px',
-            textAlign: 'center' 
+            borderRadius: '4px', 
+            marginBottom: '8px',
+            textAlign: 'center',
+            height: '85px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid #f0f0f0',
+            fontSize: '11px'
           }}>
             No ingredients on sale for this recipe
           </div>
         )}
 
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', marginTop: 'auto' }}>
           <button 
             className="view-recipe-button"
             onClick={handleViewRecipe}
@@ -162,10 +201,10 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl }:
               backgroundColor: '#333',
               color: 'white',
               border: 'none',
-              borderRadius: '8px',
-              padding: '10px 20px',
+              borderRadius: '3px',
+              padding: '5px 10px',
               cursor: recipeUrl ? 'pointer' : 'not-allowed',
-              fontSize: '15px',
+              fontSize: '11px',
               fontWeight: 'bold',
               opacity: recipeUrl ? 1 : 0.7,
               transition: 'all 0.2s ease'
