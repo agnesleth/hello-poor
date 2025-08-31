@@ -62,9 +62,10 @@ export default function RecipesPage() {
   const scrollLeft = (storeId: string) => {
     const container = scrollContainersRef.current[storeId]
     if (container) {
+      const cardWidth = container.offsetWidth
       container.scrollBy({
-        left: -210,
-        behavior: "smooth",
+        left: -cardWidth,
+        behavior: 'smooth'
       })
     }
   }
@@ -73,9 +74,10 @@ export default function RecipesPage() {
   const scrollRight = (storeId: string) => {
     const container = scrollContainersRef.current[storeId]
     if (container) {
+      const cardWidth = container.offsetWidth
       container.scrollBy({
-        left: 210,
-        behavior: "smooth",
+        left: cardWidth,
+        behavior: 'smooth'
       })
     }
   }
@@ -343,9 +345,9 @@ export default function RecipesPage() {
       <div className="min-h-screen bg-gradient-to-b from-amber-100 to-amber-50">
         <div className="container mx-auto px-2 py-3 max-w-7xl">
           <header className="mb-3">
-            <h1 className="text-xl md:text-2xl font-bold text-center text-amber-900">Your Recipe Matches</h1>
-            <p className="text-center text-amber-800 mt-1 max-w-2xl mx-auto text-xs">
-              Discover delicious recipes based on items currently on sale at your favorite stores
+            <h1 className="text-4xl md:text-4xl font-bold text-center text-amber-900">Your Recipe Matches</h1>
+            <p className="text-center text-amber-800 mt-1 max-w-2xl mx-auto text-xl md:text-xl leading-relaxed"> 
+              Discover delicious recipes based on items currently on sale at your favorite stores.
             </p>
           </header>
 
@@ -405,17 +407,21 @@ export default function RecipesPage() {
                           {/* Left scroll button */}
                           <button
                             onClick={() => scrollLeft(storeId)}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-5 h-5 rounded-full shadow-sm flex items-center justify-center transition-all duration-200 border border-amber-200"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-8 h-8 rounded-full shadow-sm flex items-center justify-center transition-all duration-200 border border-amber-200"
                             aria-label="Scroll left"
                           >
-                            <ChevronLeft className="w-3 h-3" />
+                            <ChevronLeft className="w-4 h-4" />
                           </button>
 
                           <div
                             ref={(el) => {
                               scrollContainersRef.current[storeId] = el
                             }}
-                            className="flex overflow-x-auto gap-2 pb-2 px-6 scrollbar-hide scroll-smooth"
+                            className="flex overflow-x-auto gap-4 pb-4 px-10 scrollbar-hide scroll-smooth"
+                            style={{
+                              scrollSnapType: 'x mandatory',
+                              scrollPadding: '0 40px'
+                            }}
                           >
                             <style jsx>{`
                               .scrollbar-hide::-webkit-scrollbar {
@@ -431,7 +437,11 @@ export default function RecipesPage() {
                               .slice()
                               .sort((a, b) => calculateSavings(b) - calculateSavings(a))
                               .map((recipe, index) => (
-                              <div key={`${storeId}-${index}`} className="min-w-[200px] w-[200px] flex-none">
+                              <div 
+                                key={`${storeId}-${index}`} 
+                                className="min-w-[calc(33.333% - 1rem)] w-[calc(33.333% - 1rem)] flex-none"
+                                style={{ scrollSnapAlign: 'start' }}
+                              >
                                 <RecipeCard
                                   title={recipe.recipe_name}
                                   ingredients={formatIngredients(recipe)}
@@ -448,10 +458,10 @@ export default function RecipesPage() {
                           {/* Right scroll button */}
                           <button
                             onClick={() => scrollRight(storeId)}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-5 h-5 rounded-full shadow-sm flex items-center justify-center transition-all duration-200 border border-amber-200"
+                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-amber-800 w-8 h-8 rounded-full shadow-sm flex items-center justify-center transition-all duration-200 border border-amber-200"
                             aria-label="Scroll right"
                           >
-                            <ChevronRight className="w-3 h-3" />
+                            <ChevronRight className="w-4 h-4" />
                           </button>
                         </div>
                       </div>

@@ -63,13 +63,13 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
       className="recipe-card" 
       style={{
         backgroundColor: 'white',
-        borderRadius: '6px',
+        borderRadius: '8px',
         margin: '0',
-        boxShadow: '0 1px 4px rgba(0, 0, 0, 0.06)',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        height: '360px',
+        height: '480px',
         overflow: 'hidden',
         position: 'relative'
       }}
@@ -82,18 +82,18 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
         onClick={handleToggleFavorite}
         style={{
           position: 'absolute',
-          top: '8px',
-          right: '8px',
+          top: '12px',
+          right: '12px',
           zIndex: 10,
           backgroundColor: 'white',
           borderRadius: '50%',
-          width: '24px',
-          height: '24px',
+          width: '32px',
+          height: '32px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           border: 'none',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
           cursor: 'pointer',
           opacity: isHovered || isFav ? 1 : 0,
           transition: 'opacity 0.2s ease',
@@ -102,15 +102,15 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
         <Heart 
           fill={isFav ? "#ff4747" : "transparent"} 
           color={isFav ? "#ff4747" : "#666"} 
-          size={14} 
+          size={18} 
         />
       </button>
       <div className="savings-tag" style={{
         backgroundColor: '#f5f5f5',
         color: '#333',
-        padding: '3px 6px',
+        padding: '4px 8px',
         fontWeight: 'bold',
-        fontSize: '11px',
+        fontSize: '13px',
         textAlign: 'center',
         width: '100%',
         borderBottom: '1px solid #eee'
@@ -121,7 +121,7 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
       {imageUrl && (
         <div style={{ 
           width: '100%', 
-          height: '120px',
+          height: '180px',
           overflow: 'hidden',
           flexShrink: 0
         }}>
@@ -138,37 +138,37 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
       )}
       
       <div style={{
-        padding: '8px 10px',
+        padding: '12px 14px',
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
         overflow: 'hidden'
       }}>
         <h3 className="recipe-title" style={{
-          margin: '0 0 5px 0',
-          fontSize: '12px',
+          margin: '0 0 8px 0',
+          fontSize: '14px',
           fontWeight: 'bold',
           textAlign: 'center',
-          height: '50px',
+          height: '60px',
           overflow: 'hidden',
           display: '-webkit-box',
           WebkitLineClamp: 4,
           WebkitBoxOrient: 'vertical',
           textOverflow: 'ellipsis',
-          lineHeight: '1.1'
+          lineHeight: '1.2'
         }}>
           {title}
         </h3>
 
         {/* Debug info about ingredients */}
         <div style={{ 
-          fontSize: '9px', 
+          fontSize: '11px', 
           color: '#999', 
-          marginBottom: '3px',
+          marginBottom: '4px',
           textAlign: 'center',
-          height: '12px',
+          height: '16px',
           overflow: 'hidden',
-          padding: '0 3px'
+          padding: '0 4px'
         }}>
           {ingredients && ingredients.length ? `${ingredients.length} ingredients on sale` : 'No ingredients on sale'}
         </div>
@@ -176,19 +176,19 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
         {ingredients && ingredients.length > 0 ? (
           <div className="recipe-ingredients" style={{
             width: '100%',
-            marginBottom: '8px',
+            marginBottom: '12px',
             flex: 1,
             overflow: 'hidden'
           }}>
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '3px',
-              height: '85px',
+              gap: '4px',
+              height: '140px',
               overflowY: 'auto',
               border: '1px solid #f0f0f0',
-              borderRadius: '4px',
-              padding: '5px',
+              borderRadius: '6px',
+              padding: '8px',
               scrollbarWidth: 'thin',
               scrollbarColor: '#d1d1d1 #f5f5f5',
               WebkitOverflowScrolling: 'touch'
@@ -201,14 +201,14 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: '2px 0',
+                    padding: '4px 0',
                     borderBottom: index < ingredients.length - 1 ? '1px solid #eee' : 'none'
                   }}
                 >
                   <span className="ingredient-name" style={{ 
                     fontWeight: '500',
-                    fontSize: '11px',
-                    maxWidth: '50%',
+                    fontSize: '13px',
+                    maxWidth: '60%',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap'
@@ -218,18 +218,18 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
                   <div style={{ 
                     display: 'flex', 
                     justifyContent: 'flex-end', 
-                    gap: '3px'
+                    gap: '4px'
                   }}>
                     <span style={{ 
                       fontWeight: 'bold',
-                      fontSize: '11px'
+                      fontSize: '13px'
                     }}>
                       {ingredient.price.toFixed(2)} kr
                     </span>
                     <span style={{ 
                       textDecoration: 'line-through',
                       color: '#999',
-                      fontSize: '11px'
+                      fontSize: '13px'
                     }}>
                       {ingredient.originalPrice.toFixed(2)} kr
                     </span>
@@ -240,17 +240,17 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
           </div>
         ) : (
           <div style={{ 
-            padding: '5px', 
+            padding: '8px', 
             backgroundColor: '#f8f8f8', 
-            borderRadius: '4px', 
-            marginBottom: '8px',
+            borderRadius: '6px', 
+            marginBottom: '12px',
             textAlign: 'center',
-            height: '85px',
+            height: '140px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             border: '1px solid #f0f0f0',
-            fontSize: '11px'
+            fontSize: '13px'
           }}>
             No ingredients on sale for this recipe
           </div>
@@ -265,10 +265,10 @@ export function RecipeCard({ title, ingredients, savings, recipeUrl, imageUrl, s
               backgroundColor: '#333',
               color: 'white',
               border: 'none',
-              borderRadius: '3px',
-              padding: '5px 10px',
+              borderRadius: '4px',
+              padding: '8px 16px',
               cursor: recipeUrl ? 'pointer' : 'not-allowed',
-              fontSize: '11px',
+              fontSize: '13px',
               fontWeight: 'bold',
               opacity: recipeUrl ? 1 : 0.7,
               transition: 'all 0.2s ease'
